@@ -13,7 +13,7 @@
 #include <iostream>
 
 const int SLEEPTIME = 10;
-int gameSize = 50;
+extern int gameSize;
 const int SPEED_LV[8] = { 300,200,100,50,25,15,10,5 };
 extern const int UP, DOWN, LEFT, RIGHT; //这些常量定义在"Snake.h"中
 const int PAUSE = 32;        //空格的ASCII码为32 
