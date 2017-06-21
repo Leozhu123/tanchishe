@@ -14,6 +14,7 @@
 
 const int SLEEPTIME = 10;
 const int gameSize = 50;
+const int SPEED_LV[8] = { 300,200,100,50,25,15,10,5 };
 extern const int UP, DOWN, LEFT, RIGHT; //这些常量定义在"Snake.h"中
 const int PAUSE = 32;        //空格的ASCII码为32 
 const int SPEEDUP = 'j';
@@ -91,7 +92,7 @@ void Classic_mode::generateFood() {        //用来创造食物
 }
 
 int Classic_mode::receiveCommand() {
-	const int SPEED_LV[8] = { 300,200,100,50,25,15,10,5 }; //共有4档速度 
+ //共有4档速度 
 	bool got = 0;
 	int command;
 	//下面这两行只是为了避免写贼长贼长的看到眼花缭乱的if语句
@@ -173,8 +174,8 @@ void Classic_mode::draw(const std::string& obj) { //万能画笔。这种定义形参的方式
 			gotoxy(1, i); cout << "■";
 			gotoxy(2*gameSize+3, i); cout << "■";
 		}
-		gotoxy(gameSize * 2+11, 7); cout << "SCORE:" << score;
-		gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:" << score;
+		gotoxy(gameSize * 2+11, 7); cout << "SCORE:"<<score;
+		gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:" << SPEED_LV[speed] * SLEEPTIME / 1000.0;
 		gotoxy(gameSize * 2 + 11, 11); cout << "W:向上移动";
 		gotoxy(gameSize * 2 + 11, 12); cout << "S:向下移动";
 		gotoxy(gameSize * 2 + 11, 13);	cout << "A:向左移动";
@@ -201,7 +202,7 @@ void Classic_mode::draw(const std::string& obj) { //万能画笔。这种定义形参的方式
 	}
 	else if (obj == "snakeTail") { gotoxy(snake.back().x, snake.back().y); cout << "◎" << flush; }
 	else if (obj == "score") { gotoxy(gameSize * 2 + 17, 7); cout << score << flush; }
-	else if (obj == "speed") { gotoxy(gameSize * 2 + 17, 9); cout << speed << flush; }
+	else if (obj == "speed") { gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:    "; gotoxy(gameSize * 2 + 17, 9); cout << SPEED_LV[speed] * SLEEPTIME / 1000.0 << flush; }
 	else if (obj == "died") { gotoxy(15, 8); cout << "SNAKE DIED!" << flush; }
 	else if (obj == "win") { gotoxy(17, 8); cout << "YOU WIN!" << flush; }
 }
