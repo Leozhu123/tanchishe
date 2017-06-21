@@ -58,12 +58,10 @@ int main() {
 				c = _getch();
 				if (c == 32) break;
 				else if (c == 'z') {
-					char t, t1;
-					cout << 's';
-					t = _getch();
-					t1 = _getch();
-					gameSize = (t - '0') * 10 + t1 - '0';
-				}
+					int a;
+						cin >> a;
+						gameSize = a;
+				} 
 			}
 			cm.init();
 			cm.run();
