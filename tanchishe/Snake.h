@@ -4,6 +4,8 @@
 
 #include <deque>
 #include <random>
+#include <iostream>
+extern int speed;
 
 //这几个常量需要与"Classic_mode.h"共享
 extern const int UP = 'w';
@@ -26,7 +28,8 @@ protected:
 	std::deque<Body> body;
 	Body& head() { return body.front(); }
 public:
-	Snake(int length = 3, int gameSize=20) {                //构造一条长度为length的蛇，蛇的位置随机处理。同时这也是默认构造函数。
+	Snake(int length = 3, int gameSize=20) { 
+		//构造一条长度为length的蛇，蛇的位置随机处理。同时这也是默认构造函数。
 		std::random_device rd;                                                       //定义一个随机数种子
 		std::uniform_int_distribution<int> u(1 + length, gameSize + 2 - length);     //保证蛇不会撞墙
 		std::uniform_int_distribution<int> d(0, 3);                                  //随机选择一个方向

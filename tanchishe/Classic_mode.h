@@ -13,6 +13,7 @@
 #include <iostream>
 
 const int SLEEPTIME = 10;
+int speed = 2;
 extern int gameSize;
 const int SPEED_LV[8] = { 300,200,100,50,25,15,10,5 };
 extern const int UP, DOWN, LEFT, RIGHT; //这些常量定义在"Snake.h"中
@@ -28,7 +29,7 @@ private:
 	void drawInterface();    //画经典模式的界面
 protected:
 	int score = 0;
-	int speed = 2;           //当前速度在第几档
+           //当前速度在第几档
 	bool died = 0, win = 0;
 	int foodX, foodY;        //存储食物坐标
 	void generateFood();     //产生食物
@@ -36,7 +37,9 @@ protected:
 	void draw(const std::string& obj); //专门用来画东西的函数
 public:
 	//定义Classic_mode的对象的时候，直接把snake构造了，顺便再造个食物，其它变量靠类内初始值
-	Classic_mode() : snake(3, gameSize) { generateFood(); }
+	Classic_mode() {
+
+	}
 	void help() {
 		system("cls");
 		draw("helpBox");       //画个提示框
@@ -45,6 +48,8 @@ public:
 	void init() {
 		//把该画的先画好
 		system("cls");
+		Snake snake(3, gameSize);
+		generateFood();
 		drawInterface();    /* Classic_mode 画游戏界面 */
 		draw("food");
 		draw("snake");
