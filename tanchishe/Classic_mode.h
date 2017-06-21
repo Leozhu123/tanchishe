@@ -162,7 +162,7 @@ void Classic_mode::draw(const std::string& obj) { //万能画笔。这种定义形参的方式
 		gotoxy(11, 8); cout << "W:向上  S:向下";
 		gotoxy(11, 9); cout << "A:向左  D:向右";
 		gotoxy(11, 10); cout << "J:加速  K:减速";
-		gotoxy(18, 16); cout << "[空格] 开始";
+		gotoxy(18, 16); cout << "[空格] 开始 z+数字指定大小(10-99)";
 		cout << flush;
 	}
 	else if (obj == "gameInterface") {

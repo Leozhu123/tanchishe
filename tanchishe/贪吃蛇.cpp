@@ -53,7 +53,18 @@ int main() {
 		case 1: {	/*¾­µäÄ£Ê½*/
 			Classic_mode cm;
 			cm.help();
-			while (1) if (_getch() == 32) break;
+			while (1) {
+				char c;
+				c = _getch();
+				if (c == 32) break;
+				else if (c == 'z') {
+					char t, t1;
+					cout << 's';
+					t = _getch();
+					t1 = _getch();
+					gameSize = (t - '0') * 10 + t1 - '0';
+				}
+			}
 			cm.init();
 			cm.run();
 			break;
