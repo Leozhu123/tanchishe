@@ -175,7 +175,7 @@ void Classic_mode::draw(const std::string& obj) { //万能画笔。这种定义形参的方式
 			gotoxy(2*gameSize+3, i); cout << "■";
 		}
 		gotoxy(gameSize * 2+11, 7); cout << "SCORE:"<<score;
-		gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:" << SPEED_LV[speed] * SLEEPTIME / 1000.0;
+		gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:" << speed+1;
 		gotoxy(gameSize * 2 + 11, 11); cout << "W:向上移动";
 		gotoxy(gameSize * 2 + 11, 12); cout << "S:向下移动";
 		gotoxy(gameSize * 2 + 11, 13);	cout << "A:向左移动";
@@ -202,7 +202,7 @@ void Classic_mode::draw(const std::string& obj) { //万能画笔。这种定义形参的方式
 	}
 	else if (obj == "snakeTail") { gotoxy(snake.back().x, snake.back().y); cout << "◎" << flush; }
 	else if (obj == "score") { gotoxy(gameSize * 2 + 17, 7); cout << score << flush; }
-	else if (obj == "speed") { gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:    "; gotoxy(gameSize * 2 + 17, 9); cout << SPEED_LV[speed] * SLEEPTIME / 1000.0 << flush; }
+	else if (obj == "speed") { gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:    "; gotoxy(gameSize * 2 + 17, 9); cout << speed+1 << flush; }
 	else if (obj == "died") { gotoxy(15, 8); cout << "SNAKE DIED!" << flush; }
 	else if (obj == "win") { gotoxy(17, 8); cout << "YOU WIN!" << flush; }
 }
