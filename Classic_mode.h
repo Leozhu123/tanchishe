@@ -12,183 +12,197 @@
 #include <string>
 #include <iostream>
 
-#define SLEEPTIME 50
-
-extern const int UP, DOWN, LEFT, RIGHT; //ÕâĞ©³£Á¿¶¨ÒåÔÚ"Snake.h"ÖĞ
-const int PAUSE = 32;        //¿Õ¸ñµÄASCIIÂëÎª32 
+const int SLEEPTIME = 10;
+const int gameSize = 50;
+const int SPEED_LV[8] = { 300,200,100,50,25,15,10,5 };
+extern const int UP, DOWN, LEFT, RIGHT; //è¿™äº›å¸¸é‡å®šä¹‰åœ¨"Snake.h"ä¸­
+const int PAUSE = 32;        //ç©ºæ ¼çš„ASCIIç ä¸º32 
 const int SPEEDUP = 'j';
 const int SPEEDDOWN = 'k';
 
-void gotoxy(int, int);       //È«¾Öº¯Êı£¬ÒÆ¶¯¹â±ê£¬ÔÚ"Ô´.cpp"ÖĞ¶¨Òå
+void gotoxy(int, int);       //å…¨å±€å‡½æ•°ï¼Œç§»åŠ¨å…‰æ ‡ï¼Œåœ¨"æº.cpp"ä¸­å®šä¹‰
 
-class Classic_mode {         //¾­µäÄ£Ê½
+class Classic_mode {         //ç»å…¸æ¨¡å¼
 private:
-	Snake snake;             //Ò»ÌõÆÕÍ¨µÄÉß
-	void drawInterface();    //»­¾­µäÄ£Ê½µÄ½çÃæ
+	Snake snake;             //ä¸€æ¡æ™®é€šçš„è›‡
+	void drawInterface();    //ç”»ç»å…¸æ¨¡å¼çš„ç•Œé¢
 protected:
-	const int gameSize = 20; //ÓÎÏ·ÇøÓò´óĞ¡
 	int score = 0;
-	int speed = 1;           //µ±Ç°ËÙ¶ÈÔÚµÚ¼¸µµ
+	int speed = 2;           //å½“å‰é€Ÿåº¦åœ¨ç¬¬å‡ æ¡£
 	bool died = 0, win = 0;
-	int foodX, foodY;        //´æ´¢Ê³Îï×ø±ê
-	void generateFood();     //²úÉúÊ³Îï
-	int receiveCommand();    //½ÓÊÕÖ¸Áî
-	void draw(const std::string& obj); //×¨ÃÅÓÃÀ´»­¶«Î÷µÄº¯Êı
+	int foodX, foodY;        //å­˜å‚¨é£Ÿç‰©åæ ‡
+	void generateFood();     //äº§ç”Ÿé£Ÿç‰©
+	int receiveCommand();    //æ¥æ”¶æŒ‡ä»¤
+	void draw(const std::string& obj); //ä¸“é—¨ç”¨æ¥ç”»ä¸œè¥¿çš„å‡½æ•°
 public:
-	//¶¨ÒåClassic_modeµÄ¶ÔÏóµÄÊ±ºò£¬Ö±½Ó°Ñsnake¹¹ÔìÁË£¬Ë³±ãÔÙÔì¸öÊ³Îï£¬ÆäËü±äÁ¿¿¿ÀàÄÚ³õÊ¼Öµ
-	Classic_mode() : snake(3, 20) { generateFood(); }
+	//å®šä¹‰Classic_modeçš„å¯¹è±¡çš„æ—¶å€™ï¼Œç›´æ¥æŠŠsnakeæ„é€ äº†ï¼Œé¡ºä¾¿å†é€ ä¸ªé£Ÿç‰©ï¼Œå…¶å®ƒå˜é‡é ç±»å†…åˆå§‹å€¼
+	Classic_mode() : snake(3, gameSize) { generateFood(); }
 	void help() {
 		system("cls");
-		draw("helpBox");       //»­¸öÌáÊ¾¿ò
-		draw("classicHelp");   /* Classic_mode »­³ö°ïÖúĞÅÏ¢½çÃæ */
+		draw("helpBox");       //ç”»ä¸ªæç¤ºæ¡†
+		draw("classicHelp");   /* Classic_mode ç”»å‡ºå¸®åŠ©ä¿¡æ¯ç•Œé¢ */
 	}
 	void init() {
-		//°Ñ¸Ã»­µÄÏÈ»­ºÃ
+		//æŠŠè¯¥ç”»çš„å…ˆç”»å¥½
 		system("cls");
-		drawInterface();    /* Classic_mode »­ÓÎÏ·½çÃæ */
+		drawInterface();    /* Classic_mode ç”»æ¸¸æˆç•Œé¢ */
 		draw("food");
 		draw("snake");
+		draw("speed");
 	}
 	void run() {
-		while (!(died || win)) {              //¼ÈÃ»ËÀÒ²Ã»Ó®
-			int command = receiveCommand();   //½ÓÊÕÖ¸Áî
-			if (command != -1) snake.setDirection(command);  //ÉèÖÃÇ°½ø·½Ïò
-			Body old_back = snake.back();     //¼ÇÂ¼µ±Ç°µÄÉßÎ²¡£ÔÚ³ÔÊ³ÎïµÄÊ±ºòĞèÒª°ÑËü»Ö¸´
+		while (!(died || win)) {              //æ—¢æ²¡æ­»ä¹Ÿæ²¡èµ¢
+			int command = receiveCommand();   //æ¥æ”¶æŒ‡ä»¤
+			if (command != -1) snake.setDirection(command);  //è®¾ç½®å‰è¿›æ–¹å‘
+			Body old_back = snake.back();     //è®°å½•å½“å‰çš„è›‡å°¾ã€‚åœ¨åƒé£Ÿç‰©çš„æ—¶å€™éœ€è¦æŠŠå®ƒæ¢å¤
 			draw("cleanTail");
-			snake.move_fd();                  //ÏòÇ°ÒÆ¶¯Ò»²½
-			draw("newHead");                  //°ÑĞÂµÄÉßÍ·ºÍµÚÒ»½ÚÉßÉí»­ÉÏ
-			if (snake.ifEat(foodX, foodY)) {  //³Ôµ½ÁËÊ³Îï
-				snake.restore_back(old_back); //»Ö¸´Ö®Ç°É¾³ıµÄÉßÎ²
+			snake.move_fd();                  //å‘å‰ç§»åŠ¨ä¸€æ­¥
+			draw("newHead");                  //æŠŠæ–°çš„è›‡å¤´å’Œç¬¬ä¸€èŠ‚è›‡èº«ç”»ä¸Š
+			if (snake.ifEat(foodX, foodY)) {  //åƒåˆ°äº†é£Ÿç‰©
+				snake.restore_back(old_back); //æ¢å¤ä¹‹å‰åˆ é™¤çš„è›‡å°¾
 				draw("snakeTail");
 				++score;
 				draw("score");
-				generateFood();               //²úÉúÒ»¸öĞÂµÄÊ³Îï
+			//	draw("speed");
+				generateFood();               //äº§ç”Ÿä¸€ä¸ªæ–°çš„é£Ÿç‰©
 				draw("food");
 			}
-			if (snake.ifTouchBody() || snake.ifTouchWall(1, 2 * gameSize + 3, 1, gameSize + 2)) died = 1; //×²Ç½»ò×²µ½ÁË×Ô¼º
-			if (score == 397) win = 1;        //ÓĞË­ÕæµÄÄÜÕâÃ´ÓĞÄÍĞÄÂğ
+			if (snake.ifTouchBody() || snake.ifTouchWall(1, 2 * gameSize + 3, 1, gameSize + 2)) died = 1; //æ’å¢™æˆ–æ’åˆ°äº†è‡ªå·±
+			if (score == gameSize*gameSize-3) win = 1;        //æœ‰è°çœŸçš„èƒ½è¿™ä¹ˆæœ‰è€å¿ƒå—
 			if (died) draw("died");
 			if (win) draw("win");
 		}
 	}
 };
 
-void Classic_mode::generateFood() {        //ÓÃÀ´´´ÔìÊ³Îï
+void Classic_mode::generateFood() {        //ç”¨æ¥åˆ›é€ é£Ÿç‰©
 	std::random_device rd;
-	std::uniform_int_distribution<> u(2, gameSize + 1); //ÓÃgameSize¶ø²»ÊÇmagic number
+	std::uniform_int_distribution<> u(2, gameSize + 1); //ç”¨gameSizeè€Œä¸æ˜¯magic number
 	std::default_random_engine e(rd());
 	while (1) {
 		foodX = u(e) * 2 - 1;
 		foodY = u(e);
 		bool coincide = 0;
-		for (const auto bd : snake) //¾İËµÖ»ÒªÓĞºÏÊÊµÄbegin()ºÍend()¾ÍÄÜÓÃrange for¡£·´ÕıËü·µ»ØµÄ¾ÍÊÇ¸ödeque<Body>::const_iterator
-			if (bd.x == foodX && bd.y == foodY) {  //ÅĞ¶ÏÊÇ·ñÓëÉßÖØºÏÁË
+		for (const auto bd : snake) //æ®è¯´åªè¦æœ‰åˆé€‚çš„begin()å’Œend()å°±èƒ½ç”¨range forã€‚åæ­£å®ƒè¿”å›çš„å°±æ˜¯ä¸ªdeque<Body>::const_iterator
+			if (bd.x == foodX && bd.y == foodY) {  //åˆ¤æ–­æ˜¯å¦ä¸è›‡é‡åˆäº†
 				coincide = 1; break;
 			}
-		if (!coincide) break;       //Ã»ÖØºÏ¾Í´ó¹¦¸æ³ÉÁË
+		if (!coincide) break;       //æ²¡é‡åˆå°±å¤§åŠŸå‘Šæˆäº†
 	}
 }
 
 int Classic_mode::receiveCommand() {
-	const int SPEED_LV[6] = { 60,40,100,15,5,4}; //¹²ÓĞ4µµËÙ¶È 
+ //å…±æœ‰4æ¡£é€Ÿåº¦ 
 	bool got = 0;
 	int command;
-	//ÏÂÃæÕâÁ½ĞĞÖ»ÊÇÎªÁË±ÜÃâĞ´Ôô³¤Ôô³¤µÄ¿´µ½ÑÛ»¨çÔÂÒµÄifÓï¾ä
-	std::set<int> significative = { UP,DOWN,LEFT,RIGHT,SPEEDUP,SPEEDDOWN,PAUSE };     //ÓĞĞ§µÄÖ¸Áî¼¯ºÏ
-	std::map<int, int> opposite = { { UP,DOWN },{ DOWN,UP },{ LEFT,RIGHT },{ RIGHT,LEFT } };  //ÓÃÀ´´æ´¢·½ÏòÉÏµÄÏà·´¹ØÏµ
+	//ä¸‹é¢è¿™ä¸¤è¡Œåªæ˜¯ä¸ºäº†é¿å…å†™è´¼é•¿è´¼é•¿çš„çœ‹åˆ°çœ¼èŠ±ç¼­ä¹±çš„ifè¯­å¥
+	std::set<int> significative = { UP,DOWN,LEFT,RIGHT,SPEEDUP,SPEEDDOWN,PAUSE };     //æœ‰æ•ˆçš„æŒ‡ä»¤é›†åˆ
+	std::map<int, int> opposite = { { UP,DOWN },{ DOWN,UP },{ LEFT,RIGHT },{ RIGHT,LEFT } };  //ç”¨æ¥å­˜å‚¨æ–¹å‘ä¸Šçš„ç›¸åå…³ç³»
 	for (int i = 1; i <= SPEED_LV[speed]; ++i) {
 		Sleep(SLEEPTIME);
 		if (_kbhit()) {
 			command = _getch();
-			command = std::tolower(command); //Ò»ÂÉ²ÉÓÃĞ¡Ğ´×ÖÄ¸ÅĞ¶Ï
-			if (significative.find(command) == significative.end()) continue;                           //²»ÊÇÓĞĞ§Ö¸Áî°´¼ü 
+			command = std::tolower(command); //ä¸€å¾‹é‡‡ç”¨å°å†™å­—æ¯åˆ¤æ–­
+			if (significative.find(command) == significative.end()) continue;                           //ä¸æ˜¯æœ‰æ•ˆæŒ‡ä»¤æŒ‰é”® 
 			auto map_it = opposite.find(command);
-			if (map_it != opposite.end() && map_it->second == (snake.begin() + 1)->direction) continue; //²»ÄÜÈÃÉßÍ·³¯·´·½ÏòÇ°½ø  
-			if (command == SPEEDUP && speed < 5) { ++speed; continue; }       //¼ÓËÙ
-			if (command == SPEEDDOWN && speed > 0) { --speed; continue; }     //¼õËÙ
-			if (command == PAUSE) {                                           //ÔİÍ£
+			if (map_it != opposite.end() && map_it->second == (snake.begin() + 1)->direction) continue; //ä¸èƒ½è®©è›‡å¤´æœåæ–¹å‘å‰è¿›  
+			if (command == SPEEDUP) 
+			{
+				++speed; 
+				if (speed > 7) speed = 7;
+				draw("speed");
+				continue;}      //åŠ é€Ÿ
+			if (command == SPEEDDOWN) 
+			{ 
+				--speed; 
+			    if (speed < 0) speed = 0; 
+				draw("speed");
+				continue; } //å‡é€Ÿ
+			if (command == PAUSE) {                                           //æš‚åœ
 				while (1) if (_getch() == 32) break;
 				continue;
 			}
-			got = 1;         //µÃµ½ÁËÕæÕıµÄ·½ÏòÖ¸Áî
-			break;           //ÍË³öÑ­»·
+			got = 1;         //å¾—åˆ°äº†çœŸæ­£çš„æ–¹å‘æŒ‡ä»¤
+			break;           //é€€å‡ºå¾ªç¯
 		}
 	}
 	if (got) return command;
-	else return -1;          //Ã»ÓĞµÃµ½·½ÏòÖ¸Áî£¬¼ÇÎª-1
+	else return -1;          //æ²¡æœ‰å¾—åˆ°æ–¹å‘æŒ‡ä»¤ï¼Œè®°ä¸º-1
 }
 
-void Classic_mode::drawInterface() { //»­ÓÎÏ·½çÃæ
+void Classic_mode::drawInterface() { //ç”»æ¸¸æˆç•Œé¢
 	draw("gameInterface");
-	gotoxy(51, 5); std::cout << "¾­µäÄ£Ê½"; //ÆäÊµÒ²¾ÍÕâÒ»´¦ÓĞĞ©ÌØ±ğ...°É...
+	gotoxy(gameSize * 2 + 11, 5); std::cout << "ç»å…¸æ¨¡å¼"; //å…¶å®ä¹Ÿå°±è¿™ä¸€å¤„æœ‰äº›ç‰¹åˆ«...å§...
 	std::cout << std::flush;
 }
 
-void Classic_mode::draw(const std::string& obj) { //ÍòÄÜ»­±Ê¡£ÕâÖÖ¶¨ÒåĞÎ²ÎµÄ·½Ê½Áé¸ĞÀ´Ô´ÓÚsystemº¯Êı
+void Classic_mode::draw(const std::string& obj) { //ä¸‡èƒ½ç”»ç¬”ã€‚è¿™ç§å®šä¹‰å½¢å‚çš„æ–¹å¼çµæ„Ÿæ¥æºäºsystemå‡½æ•°
 	using std::cout;
 	using std::endl;
 	using std::flush;
 	if (obj == "helpBox") {
-		gotoxy(5, 5); cout << "©³";
-		gotoxy(29, 5); cout << "©·";
-		gotoxy(5, 15); cout << "©»";
-		gotoxy(29, 15); cout << "©¿";
+		gotoxy(5, 5); cout << "â”";
+		gotoxy(29, 5); cout << "â”“";
+		gotoxy(5, 15); cout << "â”—";
+		gotoxy(29, 15); cout << "â”›";
 		for (int i = 6; i <= 14; i++) {
-			gotoxy(5, i); cout << "©§";
-			gotoxy(29, i); cout << "©§";
+			gotoxy(5, i); cout << "â”ƒ";
+			gotoxy(29, i); cout << "â”ƒ";
 		}
 		for (int i = 7; i <= 28; i += 2) {
-			gotoxy(i, 5); cout << "©¥";
-			gotoxy(i, 15); cout << "©¥";
+			gotoxy(i, 5); cout << "â”";
+			gotoxy(i, 15); cout << "â”";
 		}
 		cout << flush;
 	}
 	else if (obj == "classicHelp") {
-		gotoxy(14, 6); cout << "¾­µäÄ£Ê½";
-		gotoxy(7, 12); cout << "ÈÃÉß¾¡¿ÉÄÜ³Ôµ½¸ü¶àÊ³Îï";
-		gotoxy(9, 13); cout << "µ«²»ÄÜ×²µ½Ç½»ò×Ô¼º£¡";
-		gotoxy(11, 8); cout << "W:ÏòÉÏ  S:ÏòÏÂ";
-		gotoxy(11, 9); cout << "A:Ïò×ó  D:ÏòÓÒ";
-		gotoxy(11, 10); cout << "J:¼ÓËÙ  K:¼õËÙ";
-		gotoxy(18, 16); cout << "[¿Õ¸ñ] ¿ªÊ¼";
+		gotoxy(14, 6); cout << "ç»å…¸æ¨¡å¼";
+		gotoxy(7, 12); cout << "è®©è›‡å°½å¯èƒ½åƒåˆ°æ›´å¤šé£Ÿç‰©";
+		gotoxy(9, 13); cout << "ä½†ä¸èƒ½æ’åˆ°å¢™æˆ–è‡ªå·±ï¼";
+		gotoxy(11, 8); cout << "W:å‘ä¸Š  S:å‘ä¸‹";
+		gotoxy(11, 9); cout << "A:å‘å·¦  D:å‘å³";
+		gotoxy(11, 10); cout << "J:åŠ é€Ÿ  K:å‡é€Ÿ";
+		gotoxy(18, 16); cout << "[ç©ºæ ¼] å¼€å§‹";
 		cout << flush;
 	}
 	else if (obj == "gameInterface") {
-		for (int i = 1; i <= gameSize + 2; i++) {
-			gotoxy(2 * i - 1, 1); cout << "¡ö";
-			gotoxy(2 * i - 1, gameSize + 2); cout << "¡ö";
+		for (int i = 1; i <= gameSize+ 2; i++) {
+			gotoxy(2 * i - 1, 1); cout << "â– ";
+			gotoxy(2 * i - 1, gameSize + 2); cout << "â– ";
 		}
-		for (int i = 2; i <= gameSize + 1; i++) {
-			gotoxy(1, i); cout << "¡ö";
-			gotoxy(43, i); cout << "¡ö";
+		for (int i = 2; i <= gameSize+ 1; i++) {
+			gotoxy(1, i); cout << "â– ";
+			gotoxy(2*gameSize+3, i); cout << "â– ";
 		}
-		gotoxy(51, 7); cout << "SCORE:" << score;
-		gotoxy(51, 9); cout << "W:ÏòÉÏÒÆ¶¯";
-		gotoxy(51, 10); cout << "S:ÏòÏÂÒÆ¶¯";
-		gotoxy(51, 11);	cout << "A:Ïò×óÒÆ¶¯";
-		gotoxy(51, 12); cout << "D:ÏòÓÒÒÆ¶¯";
-		gotoxy(51, 13); cout << "J:¼ÓËÙ";
-		gotoxy(51, 14);	cout << "K:¼õËÙ";
-		gotoxy(51, 15);	cout << "[¿Õ¸ñ] ÔİÍ£";
-		gotoxy(49, 17);	cout << "Produced By GKWuxi";
-		gotoxy(49, 18);	cout << "ÎŞÎıÊĞ´óÇÅÊµÑéÑ§Ğ£";
+		gotoxy(gameSize * 2+11, 7); cout << "SCORE:"<<score;
+		gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:" << SPEED_LV[speed] * SLEEPTIME / 1000.0;
+		gotoxy(gameSize * 2 + 11, 11); cout << "W:å‘ä¸Šç§»åŠ¨";
+		gotoxy(gameSize * 2 + 11, 12); cout << "S:å‘ä¸‹ç§»åŠ¨";
+		gotoxy(gameSize * 2 + 11, 13);	cout << "A:å‘å·¦ç§»åŠ¨";
+		gotoxy(gameSize * 2 + 11, 14); cout << "D:å‘å³ç§»åŠ¨";
+		gotoxy(gameSize * 2 + 11, 15); cout << "J:åŠ é€Ÿ";
+		gotoxy(gameSize * 2 + 11, 16);	cout << "K:å‡é€Ÿ";
+		gotoxy(gameSize * 2 + 11, 17);	cout << "[ç©ºæ ¼] æš‚åœ";
+		gotoxy(gameSize * 2 + 9, 18);	cout << "Produced By GKWuxi";
+		gotoxy(gameSize * 2 + 9, 19);	cout << "æ— é”¡å¸‚å¤§æ¡¥å®éªŒå­¦æ ¡";
 		cout << flush;
 	}
-	else if (obj == "food") { gotoxy(foodX, foodY); cout << "¡ï" << flush; }
+	else if (obj == "food") { gotoxy(foodX, foodY); cout << "â˜…" << flush; }
 	else if (obj == "snake") {
 		auto it = snake.begin();
-		gotoxy(it->x, it->y); cout << "¡ñ" << flush;
-		while (++it != snake.end()) {
-			gotoxy(it->x, it->y); cout << "¡ò" << flush;
-		}
+		gotoxy(it->x, it->y); cout << "â—" << flush;
+		while (++it != snake.end()){
+			gotoxy(it->x, it->y); cout << "â—" << flush;
+	}
 	}
 	else if (obj == "cleanTail") { gotoxy(snake.back().x, snake.back().y); cout << "  " << flush; }
-	else if (obj == "newHead") {    //³ıÁË»­ĞÂµÄÉßÍ·Ö®Íâ£¬»¹Òª°ÑÔ­À´µÄÉßÍ·¡°½µ¼¶¡±ÎªÆÕÍ¨ÉßÉí
-		gotoxy(snake.front().x, snake.front().y); cout << "¡ñ" << flush;
-		gotoxy((snake.begin() + 1)->x, (snake.begin() + 1)->y); cout << "¡ò" << flush;
+	else if (obj == "newHead") {    //é™¤äº†ç”»æ–°çš„è›‡å¤´ä¹‹å¤–ï¼Œè¿˜è¦æŠŠåŸæ¥çš„è›‡å¤´â€œé™çº§â€ä¸ºæ™®é€šè›‡èº«
+		gotoxy(snake.front().x, snake.front().y); cout << "â—" << flush;
+		gotoxy((snake.begin() + 1)->x, (snake.begin() + 1)->y); cout << "â—" << flush;
 	}
-	else if (obj == "snakeTail") { gotoxy(snake.back().x, snake.back().y); cout << "¡ò" << flush; }
-	else if (obj == "score") { gotoxy(57, 7); cout << score << flush; }
+	else if (obj == "snakeTail") { gotoxy(snake.back().x, snake.back().y); cout << "â—" << flush; }
+	else if (obj == "score") { gotoxy(gameSize * 2 + 17, 7); cout << score << flush; }
+	else if (obj == "speed") { gotoxy(gameSize * 2 + 11, 9); cout << "SPEED:    "; gotoxy(gameSize * 2 + 17, 9); cout << SPEED_LV[speed] * SLEEPTIME / 1000.0 << flush; }
 	else if (obj == "died") { gotoxy(15, 8); cout << "SNAKE DIED!" << flush; }
 	else if (obj == "win") { gotoxy(17, 8); cout << "YOU WIN!" << flush; }
 }
