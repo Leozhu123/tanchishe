@@ -1,5 +1,5 @@
 #include "Classic_mode.h"
-int gameSize /*= 50*/;
+int gameSize;
 using namespace std;
 
 void gotoxy(int x, int y) {  //移动光标到第x列第y行。不是很明白为什么要这样设计
