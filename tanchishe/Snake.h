@@ -6,7 +6,6 @@
 #include <random>
 #include <iostream>
 extern int speed;
-
 //这几个常量需要与"Classic_mode.h"共享
 extern const int UP = 'w';
 extern const int DOWN = 's';

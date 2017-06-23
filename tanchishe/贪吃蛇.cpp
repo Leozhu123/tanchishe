@@ -63,7 +63,6 @@ int main() {
 						gameSize = a;
 				} 
 			}
-			
 			cm.init();
 			cm.run();
 			break;
