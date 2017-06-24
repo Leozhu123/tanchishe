@@ -140,7 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Classic_mode.h" />
+    <ClInclude Include="Food.h" />
     <ClInclude Include="Snake.h" />
+    <ClInclude Include="SuperSpeed_mode.h" />
+    <ClInclude Include="SuperSpeed_snake.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="贪吃蛇.cpp" />

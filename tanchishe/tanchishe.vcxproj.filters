@@ -21,6 +21,15 @@
     <ClInclude Include="Classic_mode.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="Food.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperSpeed_mode.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperSpeed_snake.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="贪吃蛇.cpp">
