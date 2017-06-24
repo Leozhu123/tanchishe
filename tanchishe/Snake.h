@@ -5,12 +5,14 @@
 #include <deque>
 #include <random>
 #include <iostream>
-extern int speed;
+
 //这几个常量需要与"Classic_mode.h"共享
 extern const int UP = 'w';
 extern const int DOWN = 's';
 extern const int LEFT = 'a';
 extern const int RIGHT = 'd';
+
+void gotoxy(int, int);      //全局函数，定义在"源.cpp"中
 
 struct Body {        //一节蛇身
 	int x, y, direction;
@@ -20,15 +22,10 @@ struct Body {        //一节蛇身
 
 class Snake {
 protected:
-	//下面这行不能写成std::deque<Body> body(3);
-	//因为C++规定类内定义的对象不能直接用圆括号给出其类内初始值
-	//而且这么做也是一个不太好的设计：标准库顺序容器应该尽量使用push和emplace来添加元素
-	//对于能快速增长的容器类对象定义其大小没什么意义
 	std::deque<Body> body;
 	Body& head() { return body.front(); }
 public:
-	Snake(int length = 3, int gameSize=20) { 
-		//构造一条长度为length的蛇，蛇的位置随机处理。同时这也是默认构造函数。
+	Snake(int length = 3, int gameSize = 20) {                //构造一条长度为length的蛇，蛇的位置随机处理。同时这也是默认构造函数。
 		std::random_device rd;                                                       //定义一个随机数种子
 		std::uniform_int_distribution<int> u(1 + length, gameSize + 2 - length);     //保证蛇不会撞墙
 		std::uniform_int_distribution<int> d(0, 3);                                  //随机选择一个方向
@@ -56,21 +53,21 @@ public:
 	const Body& back() const { return body.back(); }
 	void setDirection(int d) { head().direction = d; }         //设置蛇的前进方向
 	bool ifEat(int food_x, int food_y) {                       //判断是否吃到了食物
-		return head().x == food_x && head().y == food_y;
+		return front().x == food_x && front().y == food_y;
 	}
 	bool ifTouchWall(int lwall, int rwall, int uwall, int dwall) { //判断是否撞墙
-		return head().x == lwall || head().x == rwall || head().y == uwall || head().y == dwall;
+		return front().x == lwall || front().x == rwall || front().y == uwall || front().y == dwall;
 	}
 	bool ifTouchBody() {                                       //判断是否撞到了自己
-		auto it = body.cbegin();
-		while (++it != body.end())
-			if (it->x == head().x && it->y == head().y) return 1;
+		auto it = begin();
+		while (++it != end())
+			if (it->x == front().x && it->y == front().y) return 1;
 		return 0;
 	}
 	void move_fd() {                       //蛇前进
 		body.pop_back();                   //先删除旧的蛇尾
         Body new_head = head();            //在旧的蛇头的基础上改变 
-		switch (head().direction) {
+		switch (front().direction) {
 		case UP: --new_head.y; break;
 		case DOWN: ++new_head.y; break;
 		case LEFT: ----new_head.x; break;  //据说这样写是合乎语法的
@@ -79,6 +76,33 @@ public:
 		body.push_front(new_head);         //添加新的蛇头
 	}
 	void restore_back(Body old_back) { body.push_back(old_back); }  //在吃食物的时候需要恢复被删除的蛇尾
+	void draw();
+	void drawHead();
+	void drawTail();
+	void cleanTail();
 };
+
+void Snake::draw() {                  //画全蛇
+	auto it = begin();
+	gotoxy(it->x, it->y);
+	std::cout << "●" << std::flush;
+	while (++it != end()) {
+		gotoxy(it->x, it->y);
+		std::cout << "◎" << std::flush;
+	}
+}
+
+void Snake::drawHead() {              //除了画新的蛇头之外，还要把原来的蛇头“降级”为普通蛇身
+	gotoxy(front().x, front().y); std::cout << "●" << std::flush;
+	gotoxy((begin() + 1)->x, (begin() + 1)->y); std::cout << "◎" << std::flush;
+}
+
+void Snake::drawTail() {
+	gotoxy(back().x, back().y); std::cout << "◎" << std::flush;
+}
+
+void Snake::cleanTail() {
+	gotoxy(back().x, back().y); std::cout << "  " << std::flush;
+}
 
 #endif /* SNAKE_H */
