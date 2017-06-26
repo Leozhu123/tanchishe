@@ -6,6 +6,8 @@
 #include "SuperSpeed_snake.h"
 #include <vector>
 
+//extern std::ofstream debug;
+
 extern const int UP, DOWN, LEFT, RIGHT;     //定义在"Snake.h"中
 extern const int SPEED_LV[8];               //定义在"Classic_mode.h"中
 extern const int PAUSE;                     //定义在"Classic_mode.h"中
@@ -16,22 +18,23 @@ class SuperSpeed_mode : public Classic_mode {
 private:
 	SuperSpeed_snake ssnake;
 	void drawInterface();                   //覆盖了基类Classic_mode::drawInterface()函数
+	const int nFood = 5;                    //用来存储所需食物的个数
 	std::vector<Food> foods;
-	int nFood = 5;                          //用来存储所需食物的个数
-	const int speed = 7;
 	void drawHelp();
 	int receiveCommand();                   //覆盖了基类Classic_mode::receiveCommand()函数
 protected:
 	std::vector<Food> generateFood();       //重载了基类Classic_mode::generateFood()函数
 public:
 	//子类的构造函数，先调用基类的构造函数构造基类
-	SuperSpeed_mode(int gs = 20) : Classic_mode(gs), ssnake(5, gameSize), foods(generateFood()) { }
+	SuperSpeed_mode(int gs = 20) : Classic_mode(gs, 7), ssnake(5, gameSize), foods(generateFood()) { } //{ debug << "SuperSpeed_mode constructor" << std::endl; }
 	void help() {
+//		debug << "SuperSpeed_mode::help()" << std::endl;
 		system("cls");
 		print("helpBox");
 		drawHelp();         /* SuperSpeed_mode 画出帮助信息界面 */
 	}
 	void init() {
+//		debug << "SuperSpeed_mode::init()" << std::endl;
 		system("cls");
 		drawInterface();    /* SuperSpeed_mode 画游戏界面 */
 		for (auto& fd : foods) fd.draw();   //依次画出食物
@@ -48,7 +51,7 @@ public:
 			ssnake.drawHead();
 			auto eaten = ssnake.ifEat(foods.begin(), foods.end());        //被吃到的食物的迭代器
 			if (eaten != foods.end()) {                                   //有食物被吃到
-				ssnake.restore_back(old_back);
+				ssnake.restore_back(old_back); 
 				ssnake.drawTail();
 				++score;
 				print("score");
@@ -63,7 +66,7 @@ public:
 				}
 			}
 			if (ssnake.ifTouchBody() || ssnake.ifTouchWall(1, 2 * gameSize + 3, 1, gameSize + 2)) died = 1; //撞墙或撞到了自己
-			if (score == 100) win = 1;
+			if (score == 50) win = 1;
 		}
 		if (died) print("died");
 		if (win) print("win");
@@ -80,6 +83,7 @@ void SuperSpeed_mode::drawInterface() {
 }
 
 std::vector<Food> SuperSpeed_mode::generateFood() {           //产生一vector的Food
+//	debug << "SuperSpeed_mode::generateFood()" << std::endl;
 	std::vector<Food> f;
 	for (int i = 0; i != nFood; ++i) 
 		f.push_back(construct_random_food(gameSize, ssnake));
@@ -92,9 +96,9 @@ void SuperSpeed_mode::drawHelp() {
 	gotoxy(14, 6); cout << "极速模式";
 	gotoxy(11, 8); cout << "W:向上  S:向下";
 	gotoxy(11, 9); cout << "A:向左  D:向右";
-	gotoxy(7, 11); cout << "蛇会以顶级的速度前进！";
-	gotoxy(9, 12); cout << "而且食物也会变多";
-	gotoxy(8, 13); cout << "努力得到100分吧！";
+	gotoxy(8, 11); cout << "蛇会以顶级的速度前进!";
+	gotoxy(10, 12); cout << "而且食物也会变多";
+	gotoxy(10, 13); cout << "努力得到50分吧!";
 	gotoxy(18, 16); cout << "[空格] 开始";
 	cout << flush;
 }

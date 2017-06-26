@@ -6,11 +6,13 @@
 #include <random>
 #include "Snake.h"
 
+//extern std::ofstream debug;
+
 void gotoxy(int, int);      //全局函数，移动光标，定义在"源.cpp"中
 
 struct Food { 
 	int x, y;               //食物坐标
-	Food() = default;       //默认构造函数
+	Food() = default;
 	Food(int ix, int iy) : x(ix), y(iy) { }
 	Food(Food& f) : x(f.x), y(f.y) { }       //拷贝构造
 	void draw() {                            //画食物
@@ -27,6 +29,7 @@ struct Food {
 };
 
 Food construct_random_food(int gameSize, Snake& snake) {       //用来创造食物
+//	debug << "construct_random_food(int, Snake&)" << std::endl;
 	static std::random_device rd;
 	static std::uniform_int_distribution<> u(2, gameSize + 1); //用gameSize而不是magic number
 	static std::default_random_engine e(rd());

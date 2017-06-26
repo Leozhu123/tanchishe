@@ -6,9 +6,11 @@
 #include "Food.h"
 #include <vector>
 
+//extern std::ofstream debug;
+
 class SuperSpeed_snake : public Snake {
 public:
-	SuperSpeed_snake(int length = 5, int gameSize = 20) : Snake(length, gameSize) { }
+	SuperSpeed_snake(int length = 5, int gameSize = 20) : Snake(length, gameSize) { } // { debug << "SuperSpeed_snake constructor" << std::endl; }
 	std::vector<Food>::iterator ifEat(std::vector<Food>::iterator begin, 
 		                       std::vector<Food>::iterator end) {    //重载了基类Snake::ifEat()函数，并且使用标准库规范
 		while (begin != end) {

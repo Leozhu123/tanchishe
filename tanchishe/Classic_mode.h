@@ -2,6 +2,10 @@
 #ifndef CLASSIC_MODE_H
 #define CLASSIC_MODE_H
 
+//#include <fstream>
+//#include <cassert>
+//extern std::ofstream debug("debug_out.txt");
+
 #include <Windows.h>
 #include <conio.h>
 #include "Snake.h"
@@ -40,14 +44,17 @@ protected:
 	virtual void print(const std::string&); //×¨ÃÅÓÃÀ´»­¶«Î÷µÄº¯Êı
 public:
 	//¶¨ÒåClassic_modeµÄ¶ÔÏóµÄÊ±ºò£¬Ö±½Ó°Ñsnake¹¹ÔìÁË£¬Ë³±ãÔÙÔì¸öÊ³Îï£¬ÆäËü±äÁ¿¿¿ÀàÄÚ³õÊ¼Öµ
-	Classic_mode(int gs = 20) : gameSize(gs), snake(3, gameSize), food(generateFood()) { }
+	Classic_mode(int gs = 20) : gameSize(gs), snake(3, gameSize), food(generateFood()) { } //{ debug << "Classic_mode constructor" << std::endl; }
+	Classic_mode(int gs, int spd) : Classic_mode(gs) { speed = spd; } //Î¯ÍĞ¹¹Ôìº¯Êı
 	virtual void help() {
+//		debug << "Classic_mode::help()" << std::endl;
 		system("cls");
 		print("helpBox");       //»­¸öÌáÊ¾¿ò
 		drawHelp();         /* Classic_mode »­³ö°ïÖúĞÅÏ¢½çÃæ */
 	}
 	virtual void init() {
 		//°Ñ¸Ã»­µÄÏÈ»­ºÃ
+//		debug << "Classic_mode::init()" << std::endl;
 		system("cls");
 		drawInterface();    /* Classic_mode »­ÓÎÏ·½çÃæ */
 		food.draw();
@@ -79,6 +86,7 @@ public:
 };
 
 Food Classic_mode::generateFood() {        //ÓÃÀ´´´ÔìÊ³Îï
+//	debug << "Classic_mode::generateFood()" << std::endl;
 	Food f(construct_random_food(gameSize, snake));
 	return f;
 }
@@ -165,10 +173,7 @@ void Classic_mode::print(const std::string& obj) { //Êä³öÒ»Ğ©¶«Î÷¡£ÕâÖÖ¶¨ÒåĞÎ²Îµ
 		cout << flush;
 	}
 	else if (obj == "score") { gotoxy(gameSize * 2 + 17, 7); cout << score << flush; }
-	else if (obj == "speed") { 
-		gotoxy(gameSize * 2 + 17, 9);
-		cout << speed + 1 << flush;                   //ÎªÁË±ÜÃâ¸øÓÃ»§´øÀ´À§»ó£¬ËÙ¶ÈµÈ¼¶ÓÉ1¿ªÊ¼¼Æ
-	}
+	else if (obj == "speed") { gotoxy(gameSize * 2 + 17, 9); cout << speed + 1 << flush; }  //ÎªÁË±ÜÃâ¸øÓÃ»§´øÀ´À§»ó£¬ËÙ¶ÈµÈ¼¶ÓÉ1¿ªÊ¼¼Æ
 	else if (obj == "died") { gotoxy(15, 8); cout << "SNAKE DIED!" << flush; }
 	else if (obj == "win") { gotoxy(17, 8); cout << "YOU WIN!" << flush; }
 }
